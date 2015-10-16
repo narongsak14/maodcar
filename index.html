@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>index</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/app.css" rel="stylesheet" type="text/css"/>
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <section data-role="page" id="home" data-title="Welcome">
+            <header data-role="header" data-position="fixed">
+                <h1>HOME</h1>
+
+            </header>
+
+            <div data-role="content" data-text-align="center">
+                <img class="img-responsive" src="im/car.jpg" alt=""/>
+                <p class="plink"><a href="main-manu.html" data-role="button" data-inline="" 
+                                    data-icon="bars" data-iconpos="left" rel="external">MANU</a></p>
+                <p class="plink"><a href="datacar.html" data-role="button" data-inline="" 
+                                    data-icon="grid" data-iconpos="left" rel="external">Datacar</a></p>
+                <p class="plink"><a href="#home" data-role="button" data-inline="" 
+                                    data-icon="home" data-iconpos="left" data-rel="popup" rel="external">HOME</a></p> 
+                <p class="plink"><a href="hello.php" data-role="button" data-inline=""
+                                    data-icon="" data-iconpos="left" rel="external" data-ajax="false">php</a></p> 
+                <p class="plink"><a href="#myPopupDialog" data-role="button"  data-iconpos="right" data-icon="user"
+                                    data-rel="popup" data-position-to="window" data-transition="fade" 
+                                    class="ui-btn ui-corner-all ui-shadow ">log in</a></p>
+                <p class="plink"><a href="#test" data-role="button" data-inline=""  data-icon="heart"
+                                    data-iconpos="left" >ทดสอบดึง</a></p>
+            </div>
+
+            <div data-role="popup" id="myPopupDialog">
+                <div data-role="header">
+                    <h1>Log in</h1>
+                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete 
+                       ui-btn-icon-notext ui-btn-right">Close</a>
+                </div>
+
+                <div data-role="main" class="ui-content">
+                    <label for="basic">Username:</label>
+                    <input type="text" name="name" placeholder="ชื่อ" id="basic" data-mini="true" />
+                    <label for="basic">Password:</label>
+                    <input type="password" name="name" placeholder="รหัส" id="basic" data-mini="true" />
+                    <p class="plink"><a href="fome.html" data-role="button" data-inline=""
+                                        data-icon="star" data-iconpos="left" rel="external" 
+                                        data-ajax="false">ลงทะเบียน</a></p>
+
+
+                </div>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <h1>@MAOD CAR 2016</h1>
+            </div>
+        </section>
+        <section data-role="page" id="test">
+            <header data-role="header" data-position="fixed">
+                <h1>ดึงๆข้อมูล</h1>
+                <a href="main-manu.html" data-role="button" data-inline="true" data-icon="back" 
+                   data-iconpos="left" rel="external">back</a>
+                <a href="main-manu.html#runcar" rel="external" data-role="button" 
+                   data-inline="true" data-icon="bars" data-iconpos="arrow-r">save</a>
+            </header>
+
+            <div data-role="content" >
+                <ul data-role="listview" data-inset="true" id="abc">
+                    <li data-icon="carat-r">
+                        <a>A</a>
+                    </li>
+                    <li data-icon="plus">
+                        <a>B</a>
+                    </li>
+                </ul>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <h1>@MAODCAR 2016</h1>
+            </div>
+        </section>
+
+        <script type="text/javascript">
+            var serviceURL = "http://10.20.93.101/maodcar_services/connext.php";
+            var serviceURL2 = "http://10.20.93.101/maodcar_services/connext_gat_detail.php";
+            var abc;
+            $("#test").on('pageinit', function (event) {
+
+            });
+            $(document).on('pageshow', "#test", function () {
+                $.getJSON(serviceURL, function (data) {
+                    //alert("test");
+                    $("#abc li").remove();
+                    abc = data.items;
+                    $.each(abc, function (index, oc) {
+                        //alert("test");
+                        $("#abc").append("<li><a href='datacar.html?id=" + oc.id + "'>" + oc.set + "</a></li>");
+                    });
+                    $("#abc").listview('refresh');
+                });
+            });
+            $(document).on('pageshow', "#test", function () {
+                var id = gatURLVARS()["id"];
+                $.getJSON(serviceURL2 + "?id=" + id, function (data) {
+                    var a = data.itmes;
+                    $.each(a, function (index, val) {
+                        $("#sp1").html(val.home_type_name);
+                    });
+                });
+            });
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            }
+        </script>
+
+    </body>
+</html>
